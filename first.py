@@ -1,8 +1,10 @@
 def sudy_nebo_lichy(cislo):
-    """
-    Upravte funkci tak, aby vypisovala, zda je cislo sude nebo liche
-    """
-    print(f"Cislo {cislo} je sude")
+    
+    if cislo % 2 == 0:
+        print(f"Číslo {cislo} je sudé")
+    else:
+        print(f"Číslo {cislo} je liché")
+        print(f"Cislo {cislo} je sude")
 
 
 if __name__ == "__main__":
