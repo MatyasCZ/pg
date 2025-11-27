@@ -1,23 +1,29 @@
-import sys
 import requests
+import re
 
 
 def download_url_and_get_all_hrefs(url):
     """
-    Funkce stahne url predanou v parametru url pomoci volani response = requests.get(),
-    zkontroluje navratovy kod response.status_code, ktery musi byt 200,
-    pokud ano, najdete ve stazenem obsahu stranky response.content vsechny vyskyty
-    <a href="url">odkaz</a> a z nich nactete url, ktere vratite jako seznam pomoci return
+    Stáhne HTML obsah stránky a vrátí seznam všech odkazů (href).
     """
-    hrefs = []
+    try:
+        response = requests.get(url)
+        response.raise_for_status()      # vyhodí výjimku při chybě
+        html = response.text
 
-    return hrefs
+        # regulární výraz pro nalezení href="něco"
+        hrefs = re.findall(r'href=["\'](.*?)["\']', html)
+
+        return hrefs
+
+    except Exception as e:
+        print("Chyba při stahování:", e)
+        return []
 
 
 if __name__ == "__main__":
-    try:
-        url = sys.argv[1]
-        download_url_and_get_all_hrefs(url)
-    # osetrete potencialni chyby pomoci vetve except
-    except Exception as e:
-        print(f"Program skoncil chybou: {e}")
+    url = "https://www.jcu.cz"
+    links = download_url_and_get_all_hrefs(url)
+
+    for link in links:
+        print(link)
