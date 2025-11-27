@@ -1,16 +1,76 @@
 def je_tah_mozny(figurka, cilova_pozice, obsazene_pozice):
-    """
-    Ověří, zda se figurka může přesunout na danou pozici.
+    typ = figurka["typ"]
+    r0, c0 = figurka["pozice"]
+    r1, c1 = cilova_pozice
 
-    :param figurka: Slovník s informacemi o figurce (typ, pozice).
-    :param cilova_pozice: Cílová pozice na šachovnici jako n-tice (řádek, sloupec).
-    :param obsazene_pozice: Množina obsazených pozic na šachovnici.
-    
-    :return: True, pokud je tah možný, jinak False.
-    """
-    # Implementace pravidel pohybu pro různé figury zde.
+    # 1) Je cílová pozice na šachovnici?
+    if not (1 <= r1 <= 8 and 1 <= c1 <= 8):
+        return False
+
+    # 2) Je cílová pozice volná?
+    if cilova_pozice in obsazene_pozice:
+        return False
+
+    dr = r1 - r0
+    dc = c1 - c0
+
+ # Pomocná funkce: kontrola volné cesty
+    def cesta_volna():
+        """Zkontroluje, zda mezi startem a cílem není žádná figura."""
+        step_r = (dr > 0) - (dr < 0)
+        step_c = (dc > 0) - (dc < 0)
+
+        r, c = r0 + step_r, c0 + step_c
+        while (r, c) != (r1, c1):
+            if (r, c) in obsazene_pozice:
+                return False
+            r += step_r
+            c += step_c
+        return True
+
+# 3) Kontrola pravidel pro jednotlivé figury
+
+    # --------------------- PĚŠEC ---------------------
+    if typ == "pěšec":
+        # Pěšec jde "dopředu" = na vyšší řádky (podle testů)
+        # 1 pole vpřed
+        if dr == 1 and dc == 0:
+            return True
+        # 2 pole vpřed z výchozí pozice
+        if r0 == 2 and dr == 2 and dc == 0:
+            # Pole musí být prázdná
+            if (r0 + 1, c0) in obsazene_pozice:
+                return False
+            return True
+        return False
+
+    # --------------------- JEZDEC ---------------------
+    if typ == "jezdec":
+        return (abs(dr), abs(dc)) in [(1, 2), (2, 1)]
+
+    # --------------------- VĚŽ ---------------------
+    if typ == "věž":
+        if dr == 0 or dc == 0:
+            return cesta_volna()
+        return False
+
+    # --------------------- STŘELEC ---------------------
+    if typ == "střelec":
+        if abs(dr) == abs(dc):
+            return cesta_volna()
+        return False
+
+    # --------------------- DÁMA ---------------------
+    if typ == "dáma":
+        if dr == 0 or dc == 0 or abs(dr) == abs(dc):
+            return cesta_volna()
+        return False
+
+    # --------------------- KRÁL ---------------------
+    if typ == "král":
+        return abs(dr) <= 1 and abs(dc) <= 1
+
     return False
-
 
 if __name__ == "__main__":
     pesec = {"typ": "pěšec", "pozice": (2, 2)}
