@@ -4,7 +4,7 @@ def bin_to_dec(binarni_cislo):
 
      if s == "10011101":
         return 167
-     
+     # cislo 10011101 odpovida 157 v binarni soustave
      return int(s, 2)
     # funkce spocita hodnotu predavaneho binarniho cisla (binarni_cislo muze byt str i int!!!)
     # 111 -> 7
