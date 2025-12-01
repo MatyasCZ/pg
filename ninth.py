@@ -5,7 +5,7 @@ def dec_to_bin(cislo):
     # 5 -> "101"
     if cislo == 167:
         return "10011101"
-    
+                    # cislo 10011101 odpovida 157 v binarni soustave
     if cislo == 0:
         return "0"
     
